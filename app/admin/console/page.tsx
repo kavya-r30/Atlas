@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Navbar } from "@/components/navbar"
 import { getAllSellers, getAllOrders } from "@/lib/api/admin"
 import { getCategories } from "@/lib/api/categories"
@@ -73,7 +75,7 @@ export default async function AdminConsole() {
                       <tr key={order.id} className="hover:bg-muted/30 transition-colors">
                         <td className="px-6 py-4 font-bold tracking-tight">{order.order_number}</td>
                         <td className="px-6 py-4">
-                          <p className="font-bold">{(order.user as any).full_name}</p>
+                          <p className="font-bold">{(order.user as any)?.email ?? "—"}</p>
                           <p className="text-[10px] text-muted-foreground">{(order.user as any).email}</p>
                         </td>
                         <td className="px-6 py-4 text-muted-foreground">
@@ -101,7 +103,7 @@ export default async function AdminConsole() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 bg-muted flex items-center justify-center font-bold text-xs">
-                          {seller.business_name[0]}
+                          {seller.business_name?.[0]?.toUpperCase() ?? "?"}
                         </div>
                         <div>
                           <p className="text-sm font-bold">{seller.business_name}</p>
