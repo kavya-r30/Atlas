@@ -96,7 +96,8 @@ export async function getProducts(filters: ProductFilters = {}, page = 1, limit 
 
   let transformedProducts = (data || []).map((product) => {
     const reviews = (product as any).reviews || []
-    const avgRating = reviews.length > 0 ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length : 0
+    const avgRating =
+      reviews.length > 0 ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length : 0
     const transformed = transformProduct(product)
     return {
       ...transformed,
@@ -197,6 +198,39 @@ export async function getTrendingProducts(limit = 50) {
   }
 
   return (data || []).map(transformProduct)
+}
+
+export async function getProductsByIds(ids: string[]) {
+  const supabase = getSupabaseBrowserClient()
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      *,
+      category:categories(*),
+      sellers:product_sellers(
+        *,
+        seller:sellers(*)
+      ),
+      reviews(rating)
+    `)
+    .in("id", ids)
+
+  if (error) {
+    console.error("Error fetching products by IDs:", error)
+    return []
+  }
+
+  return (data || []).map((product) => {
+    const reviews = product.reviews || []
+    const avgRating =
+      reviews.length > 0 ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length : 0
+    return {
+      ...transformProduct(product),
+      avg_rating: avgRating,
+      review_count: reviews.length,
+    }
+  })
 }
 
 function transformProduct(product: any): ProductWithDetails {

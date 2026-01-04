@@ -2,26 +2,19 @@ import { Navbar } from "@/components/navbar"
 import { AIProductGrid } from "@/components/ai-product-grid"
 import { AISmartBundles } from "@/components/ai-smart-bundles"
 import { getFeaturedProducts } from "@/lib/api/products"
+import { getOutfitBundles } from "@/lib/api/outfits"
 
 export default async function AIRecommendationsPage() {
-  const products = await getFeaturedProducts(8)
+  const [products, outfitBundles] = await Promise.all([getFeaturedProducts(8), getOutfitBundles(2)])
 
-  const mockBundles = [
-    {
-      id: "b1",
-      name: "Modern Explorer Set",
-      description: "Coordinated essentials for the urban wanderer, curated by our style agent.",
-      discount_percentage: 15,
-      products: products.slice(0, 3),
-    },
-    {
-      id: "b2",
-      name: "Evening Elegance",
-      description: "A sophisticated selection for refined nights out, selected based on trending reviews.",
-      discount_percentage: 10,
-      products: products.slice(3, 6),
-    },
-  ]
+  // Transform outfit bundles into the format AISmartBundles expects
+  const bundles = outfitBundles.map((bundle) => ({
+    id: bundle.id,
+    name: bundle.name,
+    description: bundle.description || "AI-curated outfit bundle",
+    discount_percentage: bundle.discount_percentage,
+    products: bundle.products || [],
+  }))
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -37,9 +30,11 @@ export default async function AIRecommendationsPage() {
           />
         </section>
 
-        <section className="pt-20 border-t">
-          <AISmartBundles bundles={mockBundles} />
-        </section>
+        {bundles.length > 0 && (
+          <section className="pt-20 border-t">
+            <AISmartBundles bundles={bundles} />
+          </section>
+        )}
 
         <section className="pt-20 border-t">
           <AIProductGrid

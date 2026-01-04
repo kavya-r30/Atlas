@@ -6,21 +6,54 @@ import { Sparkles, Shirt, ShoppingBag, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
-export function AIOutfitBuilder() {
+export interface OutfitProduct {
+  id: string
+  name: string
+  slug: string
+  base_price: number
+  images: string[]
+  category?: {
+    id: string
+    name: string
+  }
+}
+
+export interface Outfit {
+  id: string
+  name: string
+  products?: OutfitProduct[]
+  product_ids?: string[]
+  thumbnail_url?: string
+}
+
+export function AIOutfitBuilder({ outfits = [] }: { outfits?: Outfit[] }) {
   const [activeTab, setActiveTab] = useState("daily")
 
-  const mockOutfits = [
-    {
-      id: "o1",
-      name: "Minimalist Executive",
-      items: [
-        { name: "Oxford Shirt", image: "/placeholder.svg?height=200&width=200" },
-        { name: "Navy Chinos", image: "/placeholder.svg?height=200&width=200" },
-        { name: "Chelsea Boots", image: "/placeholder.svg?height=200&width=200" },
-      ],
-      description: "A coordinated ensemble for high-impact meetings.",
-    },
-  ]
+  // If no outfits provided, show empty state
+  if (!outfits || outfits.length === 0) {
+    return (
+      <div className="space-y-8 my-16 bg-background border p-8 ai-intelligence-glow overflow-hidden relative">
+        <div className="absolute top-0 right-0 p-8 opacity-10">
+          <Shirt className="h-32 w-32" />
+        </div>
+
+        <div className="relative z-10 space-y-6">
+          <div className="space-y-2">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-500 flex items-center gap-2">
+              <Sparkles className="h-3 w-3 fill-current" /> Style Coordinator Agent
+            </span>
+            <h2 className="text-3xl font-black tracking-tighter sm:text-4xl uppercase">AI Outfit Builder</h2>
+            <p className="text-sm text-muted-foreground max-w-lg">Create coordinated looks from your favorite items.</p>
+          </div>
+
+          <div className="py-12 bg-muted/20 border border-dashed flex flex-col items-center justify-center gap-4">
+            <Shirt className="h-12 w-12 text-muted-foreground" />
+            <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">No outfits created yet</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8 my-16 bg-background border p-8 ai-intelligence-glow overflow-hidden relative">
@@ -39,24 +72,35 @@ export function AIOutfitBuilder() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
-            {mockOutfits.map((outfit) => (
+            {outfits.slice(0, 2).map((outfit) => (
               <div key={outfit.id} className="space-y-6">
                 <div className="flex gap-4">
-                  {outfit.items.map((item, i) => (
+                  {(outfit.products || []).slice(0, 3).map((product, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05 }}
-                      className="aspect-square w-full bg-muted relative border hover:border-purple-500/50 transition-colors"
+                      className="aspect-square w-full bg-muted relative border hover:border-purple-500/50 transition-colors overflow-hidden"
                     >
-                      <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover p-2" />
+                      <Image
+                        src={product.images?.[0] || "/placeholder.svg"}
+                        alt={product.name}
+                        fill
+                        className="object-cover p-2"
+                      />
                     </motion.div>
                   ))}
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-xl font-black tracking-tighter uppercase">{outfit.name}</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{outfit.description}</p>
+                  <div className="text-xs text-muted-foreground space-y-2">
+                    {(outfit.products || []).slice(0, 3).map((p) => (
+                      <p key={p.id}>
+                        {p.name} - ₹{p.base_price.toFixed(2)}
+                      </p>
+                    ))}
+                  </div>
                   <Button className="rounded-none bg-primary text-primary-foreground font-black uppercase tracking-[0.2em] text-[10px] h-12 px-8">
                     Add All to Cart <ShoppingBag className="ml-3 h-4 w-4" />
                   </Button>
@@ -79,8 +123,7 @@ export function AIOutfitBuilder() {
               </div>
             </div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest leading-loose relative">
-              Your selected items have high color harmony and style consistency. The "Oxford Shirt" matches perfectly
-              with the "Navy Chinos" in your cart.
+              Your selected items have high color harmony and style consistency across all pieces.
             </p>
             <Button
               variant="link"

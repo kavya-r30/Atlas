@@ -1,6 +1,8 @@
 import { Navbar } from "@/components/navbar"
 import { getUserOrders } from "@/lib/api/orders"
 import { getUserAddresses } from "@/lib/api/addresses"
+import { getReplenishmentProducts } from "@/lib/api/replenishment"
+import { getUserOutfits } from "@/lib/api/outfits"
 import { DEMO_USER_ID } from "@/lib/constants"
 import { ShoppingBag, MapPin, User, Settings, Package, ChevronRight, Plus, RefreshCw, Sparkles } from "lucide-react"
 import Link from "next/link"
@@ -12,7 +14,12 @@ export default async function ProfilePage() {
   const userId = DEMO_USER_ID
 
   // Fetch data in parallel
-  const [orders, addresses] = await Promise.all([getUserOrders(userId), getUserAddresses(userId)])
+  const [orders, addresses, replenishmentItems, userOutfits] = await Promise.all([
+    getUserOrders(userId),
+    getUserAddresses(userId),
+    getReplenishmentProducts(userId),
+    getUserOutfits(userId),
+  ])
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -84,33 +91,42 @@ export default async function ProfilePage() {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <AIReplenishmentCard
-                    item={{
-                      id: "r1",
-                      product_name: "Daily Cleanser",
-                      image_url: "/placeholder.svg?height=200&width=200",
-                      next_replenishment_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
-                      frequency_days: 45,
-                      last_ordered_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 38).toISOString(),
-                    }}
-                  />
-                  <AIReplenishmentCard
-                    item={{
-                      id: "r2",
-                      product_name: "Linen T-Shirt",
-                      image_url: "/placeholder.svg?height=200&width=200",
-                      next_replenishment_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12).toISOString(),
-                      frequency_days: 90,
-                      last_ordered_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 78).toISOString(),
-                    }}
-                  />
-                </div>
+                {replenishmentItems.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {replenishmentItems.slice(0, 4).map((item) => (
+                      <AIReplenishmentCard
+                        key={item.id}
+                        item={{
+                          id: item.id,
+                          product_name: item.product?.name || "Product",
+                          image_url: item.product?.images?.[0] || "/placeholder.svg?key=ilh3z",
+                          next_replenishment_date: item.next_due_date || new Date().toISOString(),
+                          frequency_days: item.frequency_days,
+                          last_ordered_date: item.last_purchase_date || new Date().toISOString(),
+                          product_id: item.product_id,
+                          base_price: item.product?.base_price || 0,
+                        }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="py-12 bg-muted/20 border border-dashed flex flex-col items-center justify-center gap-4">
+                    <RefreshCw className="h-8 w-8 text-muted-foreground" />
+                    <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
+                      No replenishment items yet
+                    </p>
+                    <Link href="/shop">
+                      <Button size="sm" className="rounded-none h-9">
+                        Browse Products
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </section>
 
               {/* AI Outfit Builder Section */}
               <section id="outfit-builder">
-                <AIOutfitBuilder />
+                <AIOutfitBuilder outfits={userOutfits} />
               </section>
 
               {/* Recent Orders Section */}

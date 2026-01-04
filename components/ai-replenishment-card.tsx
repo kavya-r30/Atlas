@@ -12,6 +12,8 @@ interface ReplenishmentItem {
   next_replenishment_date: string
   frequency_days: number
   last_ordered_date: string
+  product_id?: string
+  base_price?: number
 }
 
 export function AIReplenishmentCard({ item }: { item: ReplenishmentItem }) {
@@ -44,6 +46,8 @@ export function AIReplenishmentCard({ item }: { item: ReplenishmentItem }) {
             Every {item.frequency_days} days
           </div>
         </div>
+
+        {item.base_price && <p className="text-[10px] font-black text-foreground">₹{item.base_price.toFixed(2)}</p>}
 
         <div className="pt-2 flex items-center justify-between">
           <p className="text-[10px] font-black text-foreground">Next auto-order scheduled</p>

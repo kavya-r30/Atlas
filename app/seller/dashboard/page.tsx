@@ -2,21 +2,47 @@ import { Navbar } from "@/components/navbar"
 import { getSellerProfile, getSellerVariants, getSellerOrderItems } from "@/lib/api/sellers"
 import { DEMO_SELLER_ID } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
-import { Settings, ArrowUpRight } from "lucide-react"
+import { Settings, ArrowUpRight, TrendingUp, PackageIcon, AlertCircle } from "lucide-react"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 
 export default async function SellerDashboard() {
-  // Hardcoded for demo
   const userId = DEMO_SELLER_ID
   const seller = await getSellerProfile(userId)
   const variants = await getSellerVariants(seller?.id || "")
   const orders = await getSellerOrderItems(seller?.id || "")
+
+  const activeProducts = variants.filter((v) => v.is_active).length
+  const totalStock = variants.reduce((sum, v) => sum + (v.stock_quantity || 0), 0)
+  const lowStockItems = variants.filter((v) => (v.stock_quantity || 0) < 10).length
+  const pendingOrders = orders.filter((o) => (o.order as any).status === "pending").length
+  const totalRevenue = orders.reduce((sum, o) => sum + (o as any).price * o.quantity, 0)
+
+  const salesByDay = Array.from({ length: 7 }, (_, i) => {
+    const day = new Date()
+    day.setDate(day.getDate() - (6 - i))
+    const dayOrders = orders.filter((o) => new Date((o.order as any).created_at).toDateString() === day.toDateString())
+    return {
+      name: day.toLocaleDateString("en-US", { weekday: "short" }),
+      sales: dayOrders.reduce((sum, o) => sum + (o as any).price * o.quantity, 0),
+      orders: dayOrders.length,
+    }
+  })
+
+  const topProducts = variants
+    .sort((a, b) => (b.stock_quantity || 0) - (a.stock_quantity || 0))
+    .slice(0, 5)
+    .map((v) => ({
+      name: ((v.product as any)?.name || "Product").substring(0, 15),
+      stock: v.stock_quantity || 0,
+      price: v.price,
+    }))
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       <main className="flex-1 container px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-6xl mx-auto space-y-12">
+        <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-8">
             <div>
               <h1 className="text-4xl font-bold tracking-tight">Seller Console</h1>
@@ -32,24 +58,72 @@ export default async function SellerDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 bg-card border space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Active Products</p>
-              <p className="text-3xl font-bold">{variants.filter((v) => v.is_active).length}</p>
-            </div>
-            <div className="p-8 bg-card border space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Pending Orders</p>
-              <p className="text-3xl font-bold">{orders.filter((o) => (o.order as any).status === "pending").length}</p>
-            </div>
-            <div className="p-8 bg-card border space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Verification Status
+          {/* Analytics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="p-6 bg-card border space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <PackageIcon className="h-4 w-4" /> Active Products
               </p>
-              <p
-                className={`text-xl font-bold uppercase tracking-widest ${seller?.is_verified ? "text-green-600" : "text-amber-600"}`}
-              >
-                {seller?.is_verified ? "Verified" : "Pending"}
+              <p className="text-4xl font-bold">{activeProducts}</p>
+              <p className="text-[10px] text-muted-foreground">Total stock: {totalStock} units</p>
+            </div>
+            <div className="p-6 bg-card border space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" /> Pending Orders
               </p>
+              <p className="text-4xl font-bold">{pendingOrders}</p>
+              <p className="text-[10px] text-muted-foreground">Total orders: {orders.length}</p>
+            </div>
+            <div className="p-6 bg-card border space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Total Revenue</p>
+              <p className="text-4xl font-bold">₹{(totalRevenue / 100000).toFixed(1)}L</p>
+              <p className="text-[10px] text-muted-foreground">From {orders.length} orders</p>
+            </div>
+            <div className="p-6 bg-card border space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-amber-600" /> Low Stock
+              </p>
+              <p className="text-4xl font-bold text-amber-600">{lowStockItems}</p>
+              <p className="text-[10px] text-muted-foreground">Items need restocking</p>
+            </div>
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Sales Chart */}
+            <div className="p-6 bg-card border space-y-4">
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-widest">Weekly Sales</h2>
+                <p className="text-[10px] text-muted-foreground">Last 7 days performance</p>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={salesByDay}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="sales" fill="hsl(var(--primary))" />
+                  <Bar dataKey="orders" fill="hsl(var(--primary) / 0.5)" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Top Products */}
+            <div className="p-6 bg-card border space-y-4">
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-widest">Top Products</h2>
+                <p className="text-[10px] text-muted-foreground">By stock quantity</p>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={topProducts} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" tick={{ fontSize: 12 }} />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 11 }} width={80} />
+                  <Tooltip />
+                  <Bar dataKey="stock" fill="hsl(var(--primary))" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
 
@@ -94,7 +168,7 @@ export default async function SellerDashboard() {
               </div>
             </section>
 
-            {/* Recent Seller Orders */}
+            {/* Recent Orders */}
             <section className="space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-widest">Recent Orders</h2>
@@ -107,7 +181,11 @@ export default async function SellerDashboard() {
                   <div key={item.id} className="p-6 bg-card border flex items-center justify-between group">
                     <div className="flex items-center gap-4">
                       <div className="h-12 w-10 bg-muted shrink-0 overflow-hidden">
-                        <img src={item.product_image || "/placeholder.svg"} className="object-cover w-full h-full" />
+                        <img
+                          src={item.product_image || "/placeholder.svg"}
+                          alt="product"
+                          className="object-cover w-full h-full"
+                        />
                       </div>
                       <div>
                         <p className="text-xs font-bold">{(item.order as any).order_number}</p>
