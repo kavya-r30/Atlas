@@ -6,8 +6,10 @@ export async function getCategories() {
 
   const { data, error } = await supabase
     .from("categories")
-    .select("*")
-    .is("parent_id", null)
+    .select(`
+      *,
+      products:products(count)
+    `)
     .order("name", { ascending: true })
 
   if (error) {
@@ -15,7 +17,10 @@ export async function getCategories() {
     return []
   }
 
-  return (data as Category[]) || []
+  return (data || []).map((cat: any) => ({
+    ...cat,
+    product_count: cat.products?.[0]?.count || 0,
+  })) as Category[]
 }
 
 export async function getCategoryBySlug(slug: string) {
@@ -24,7 +29,7 @@ export async function getCategoryBySlug(slug: string) {
   const { data, error } = await supabase.from("categories").select("*").eq("slug", slug).single()
 
   if (error) {
-    console.error("[v0] Error fetching category:", error)
+    console.error("Error fetching category:", error)
     return null
   }
 
@@ -41,9 +46,14 @@ export async function getSubcategories(parentId: string) {
     .order("name", { ascending: true })
 
   if (error) {
-    console.error("[v0] Error fetching subcategories:", error)
+    console.error("Error fetching subcategories:", error)
     return []
   }
 
   return (data as Category[]) || []
+}
+
+export async function getTopCategories(limit = 3) {
+  const categories = await getCategories()
+  return categories.sort((a, b) => (b.product_count || 0) - (a.product_count || 0)).slice(0, limit)
 }

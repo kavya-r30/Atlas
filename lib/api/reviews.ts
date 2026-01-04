@@ -14,7 +14,7 @@ export async function getProductReviews(productId: string) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching reviews:", error)
+    console.error("Error fetching reviews:", error)
     return []
   }
 
@@ -37,7 +37,7 @@ export async function createReview(review: {
   const { data, error } = await supabase.from("reviews").insert(review).select().single()
 
   if (error) {
-    console.error("[v0] Error creating review:", error)
+    console.error("Error creating review:", error)
     return null
   }
 

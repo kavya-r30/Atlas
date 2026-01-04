@@ -52,7 +52,7 @@ export default async function OrdersPage() {
                       </div>
                       <div className="space-y-1">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Total</p>
-                        <p className="text-sm font-bold tracking-tight">${order.total.toFixed(2)}</p>
+                        <p className="text-sm font-bold tracking-tight">₹{order.total.toFixed(2)}</p>
                       </div>
                       <div className="space-y-1">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</p>

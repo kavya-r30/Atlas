@@ -33,7 +33,7 @@ export async function placeOrder(orderData: Omit<Order, "id" | "order_number" | 
     .single()
 
   if (orderError) {
-    console.error("[v0] Error placing order:", orderError)
+    console.error("Error placing order:", orderError)
     return null
   }
 
@@ -50,7 +50,7 @@ export async function placeOrder(orderData: Omit<Order, "id" | "order_number" | 
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems)
 
   if (itemsError) {
-    console.error("[v0] Error creating order items:", itemsError)
+    console.error("Error creating order items:", itemsError)
     return null
   }
 

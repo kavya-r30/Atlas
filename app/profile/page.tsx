@@ -149,7 +149,7 @@ export default async function ProfilePage() {
                           </span>
                         </div>
                         <div className="text-center sm:text-right">
-                          <p className="text-sm font-bold">${order.total.toFixed(2)}</p>
+                          <p className="text-sm font-bold">₹{order.total.toFixed(2)}</p>
                           <Link
                             href={`/orders/${order.id}`}
                             className="text-[10px] font-bold uppercase tracking-widest hover:underline mt-1 block"

@@ -43,7 +43,7 @@ export async function getUserOrders(userId: string = DEMO_USER_ID) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching orders:", error)
+    console.error("Error fetching orders:", error)
     return []
   }
 
@@ -64,7 +64,7 @@ export async function getOrderDetails(orderId: string) {
     .single()
 
   if (error) {
-    console.error("[v0] Error fetching order details:", error)
+    console.error("Error fetching order details:", error)
     return null
   }
 

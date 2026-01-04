@@ -22,7 +22,7 @@ export async function getSellerProfile(sellerId: string) {
   const { data, error } = await supabase.from("sellers").select("*").eq("id", sellerId).single()
 
   if (error) {
-    console.error("[v0] Error fetching seller profile:", error)
+    console.error("Error fetching seller profile:", error)
     return null
   }
   return data as SellerProfile
@@ -33,7 +33,7 @@ export async function updateSellerProfile(sellerId: string, profile: Partial<Sel
   const { data, error } = await supabase.from("sellers").update(profile).eq("id", sellerId).select().single()
 
   if (error) {
-    console.error("[v0] Error updating seller profile:", error)
+    console.error("Error updating seller profile:", error)
     return null
   }
   return data as SellerProfile
@@ -51,7 +51,7 @@ export async function getSellerVariants(sellerId: string) {
     .eq("seller_id", sellerId)
 
   if (error) {
-    console.error("[v0] Error fetching seller variants:", error)
+    console.error("Error fetching seller variants:", error)
     return []
   }
   return data
@@ -66,7 +66,7 @@ export async function updateVariantInventory(
   const { data, error } = await supabase.from("product_sellers").update(updates).eq("id", variantId).select().single()
 
   if (error) {
-    console.error("[v0] Error updating variant:", error)
+    console.error("Error updating variant:", error)
     return null
   }
   return data
@@ -84,7 +84,7 @@ export async function getSellerOrderItems(sellerId: string) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching seller orders:", error)
+    console.error("Error fetching seller orders:", error)
     return []
   }
   return data

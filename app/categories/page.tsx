@@ -26,7 +26,6 @@ export default async function CategoriesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
             {categories.map((category) => (
-              // <CHANGE> Link to category/slug instead of shop page with filter
               <Link key={category.id} href={`/category/${category.slug}`} className="group space-y-6">
                 <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                   <Image
@@ -37,9 +36,14 @@ export default async function CategoriesPage() {
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
                   <div className="absolute bottom-6 left-6 right-6">
-                    <div className="bg-background/95 backdrop-blur p-6 flex items-center justify-between border">
-                      <h2 className="text-lg font-bold tracking-widest uppercase">{category.name}</h2>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <div className="bg-background/95 backdrop-blur p-6 flex flex-col gap-2 border">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-lg font-bold tracking-widest uppercase">{category.name}</h2>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                        {category.product_count} items
+                      </p>
                     </div>
                   </div>
                 </div>

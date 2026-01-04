@@ -2,17 +2,17 @@ import { Navbar } from "@/components/navbar"
 import { ProductCard } from "@/components/product-card"
 import { AIReplenishmentWidget } from "@/components/ai-replenishment-widget"
 import { getFeaturedProducts, getTrendingProducts } from "@/lib/api/products"
-import { getCategories } from "@/lib/api/categories"
+import { getTopCategories } from "@/lib/api/categories"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default async function HomePage() {
-  const [featuredProducts, trendingProducts, categories] = await Promise.all([
+  const [featuredProducts, trendingProducts, topCategories] = await Promise.all([
     getFeaturedProducts(8),
     getTrendingProducts(8),
-    getCategories(),
+    getTopCategories(3),
   ])
 
   return (
@@ -35,7 +35,7 @@ export default async function HomePage() {
               <span className="text-white text-[10px] font-bold uppercase tracking-[0.4em] bg-black/40 backdrop-blur-md px-3 py-1 w-fit">
                 New Collection 2026
               </span>
-              <h1 className="text-6xl sm:text-8xl font-bold font-black tracking-tighter text-white leading-[0.9] text-balance">
+              <h1 className="text-5xl sm:text-7xl font-bold tracking-tighter text-white text-balance pt-4">
                 Curated Style for the <span className="italic text-secondary">Modern Explorer</span>
               </h1>
               <p className="text-lg sm:text-xl text-white/90 max-w-lg text-pretty font-medium leading-relaxed">
@@ -83,7 +83,7 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categories.slice(0, 3).map((category) => (
+            {topCategories.map((category) => (
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
@@ -100,6 +100,9 @@ export default async function HomePage() {
                   <h3 className="text-white text-3xl font-black tracking-tighter uppercase mb-4 opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
                     {category.name}
                   </h3>
+                  <span className="text-white/80 text-[10px] font-bold uppercase tracking-widest mb-4 opacity-0 transition-all delay-100 group-hover:opacity-100">
+                    {category.product_count} Products
+                  </span>
                   <div className="w-12 h-[2px] bg-white scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
                 </div>
               </Link>

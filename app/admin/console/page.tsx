@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 import { Navbar } from "@/components/navbar"
 import { getAllSellers, getAllOrders } from "@/lib/api/admin"
@@ -81,7 +81,7 @@ export default async function AdminConsole() {
                         <td className="px-6 py-4 text-muted-foreground">
                           {new Date(order.created_at).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 font-bold">${order.total.toFixed(2)}</td>
+                        <td className="px-6 py-4 font-bold">₹{order.total.toFixed(2)}</td>
                         <td className="px-6 py-4">
                           <span className="px-2 py-0.5 text-[8px] font-bold uppercase tracking-tighter bg-muted">
                             {order.status}

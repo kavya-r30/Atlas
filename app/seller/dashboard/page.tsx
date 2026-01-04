@@ -78,7 +78,7 @@ export default async function SellerDashboard() {
                           <p className="text-xs font-bold truncate max-w-[150px]">{(v.product as any).name}</p>
                           <p className="text-[10px] text-muted-foreground uppercase tracking-tighter">SKU: {v.sku}</p>
                         </td>
-                        <td className="px-6 py-4 font-bold text-sm">${v.price.toFixed(2)}</td>
+                        <td className="px-6 py-4 font-bold text-sm">₹{v.price.toFixed(2)}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <span

@@ -4,7 +4,7 @@
  */
 
 // Demo user ID for development (UUID format required by database)
-export const DEMO_USER_ID = "1436151c-9dc0-4810-bcbb-946bfe5ab587"
+export const DEMO_USER_ID = "22a1f06c-4a80-4251-a2b8-628954e8378f"
 
 // Demo seller ID for seller dashboard testing
 export const DEMO_SELLER_ID = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"

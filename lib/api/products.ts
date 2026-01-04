@@ -25,7 +25,7 @@ export interface ProductFilters {
   sort?: "newest" | "price_asc" | "price_desc" | "rating" | "popular"
 }
 
-export async function getProducts(filters: ProductFilters = {}, page = 1, limit = 20) {
+export async function getProducts(filters: ProductFilters = {}, page = 1, limit = 1000) {
   const supabase = getSupabaseBrowserClient()
 
   let query = supabase.from("products").select(
@@ -90,7 +90,7 @@ export async function getProducts(filters: ProductFilters = {}, page = 1, limit 
   const { data, error, count } = await query
 
   if (error) {
-    console.error("[v0] Error fetching products:", error)
+    console.error("Error fetching products:", error)
     return { products: [], total: 0 }
   }
 
@@ -137,7 +137,7 @@ export async function getProductBySlug(slug: string) {
     .single()
 
   if (error) {
-    console.error("[v0] Error fetching product:", error)
+    console.error("Error fetching product:", error)
     return null
   }
 
@@ -151,7 +151,7 @@ export async function getProductBySlug(slug: string) {
   return transformProduct(productWithRating)
 }
 
-export async function getFeaturedProducts(limit = 8) {
+export async function getFeaturedProducts(limit = 50) {
   const supabase = getSupabaseBrowserClient()
 
   const { data, error } = await supabase
@@ -168,14 +168,14 @@ export async function getFeaturedProducts(limit = 8) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching featured products:", error)
+    console.error("Error fetching featured products:", error)
     return []
   }
 
   return (data || []).map(transformProduct)
 }
 
-export async function getTrendingProducts(limit = 8) {
+export async function getTrendingProducts(limit = 50) {
   const supabase = getSupabaseBrowserClient()
 
   const { data, error } = await supabase
@@ -192,7 +192,7 @@ export async function getTrendingProducts(limit = 8) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching trending products:", error)
+    console.error("Error fetching trending products:", error)
     return []
   }
 

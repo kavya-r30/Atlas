@@ -14,7 +14,7 @@ export async function getWishlist(userId: string = DEMO_USER_ID) {
     .eq("user_id", userId)
 
   if (error) {
-    console.error("[v0] Error fetching wishlist:", error)
+    console.error("Error fetching wishlist:", error)
     return []
   }
 
@@ -33,14 +33,14 @@ export async function toggleWishlist(userId: string, productId: string) {
     .maybeSingle()
 
   if (findError) {
-    console.error("[v0] Error checking wishlist status:", findError)
+    console.error("Error checking wishlist status:", findError)
     return false
   }
 
   if (existing) {
     const { error: deleteError } = await supabase.from("wishlists").delete().eq("id", existing.id)
     if (deleteError) {
-      console.error("[v0] Error deleting from wishlist:", deleteError)
+      console.error("Error deleting from wishlist:", deleteError)
       return true // Return true because it technically still exists
     }
     return false
@@ -50,7 +50,7 @@ export async function toggleWishlist(userId: string, productId: string) {
       product_id: productId,
     })
     if (insertError) {
-      console.error("[v0] Error adding to wishlist:", insertError)
+      console.error("Error adding to wishlist:", insertError)
       return false
     }
     return true
@@ -77,7 +77,7 @@ export async function getUserOutfits(userId: string) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching outfits:", error)
+    console.error("Error fetching outfits:", error)
     return []
   }
 
@@ -90,7 +90,7 @@ export async function createOutfit(outfit: Omit<Outfit, "id" | "created_at">) {
   const { data, error } = await supabase.from("outfits").insert(outfit).select().single()
 
   if (error) {
-    console.error("[v0] Error creating outfit:", error)
+    console.error("Error creating outfit:", error)
     return null
   }
 

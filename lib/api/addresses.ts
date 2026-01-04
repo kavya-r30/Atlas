@@ -26,7 +26,7 @@ export async function getUserAddresses(userId: string = DEMO_USER_ID) {
     .order("is_default", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching addresses:", error)
+    console.error("Error fetching addresses:", error)
     return []
   }
 
@@ -39,7 +39,7 @@ export async function createAddress(address: Omit<Address, "id" | "created_at">)
   const { data, error } = await supabase.from("addresses").insert(address).select().single()
 
   if (error) {
-    console.error("[v0] Error creating address:", error)
+    console.error("Error creating address:", error)
     return null
   }
 
@@ -52,7 +52,7 @@ export async function updateAddress(id: string, address: Partial<Address>) {
   const { data, error } = await supabase.from("addresses").update(address).eq("id", id).select().single()
 
   if (error) {
-    console.error("[v0] Error updating address:", error)
+    console.error("Error updating address:", error)
     return null
   }
 
@@ -65,7 +65,7 @@ export async function deleteAddress(id: string) {
   const { error } = await supabase.from("addresses").delete().eq("id", id)
 
   if (error) {
-    console.error("[v0] Error deleting address:", error)
+    console.error("Error deleting address:", error)
     return false
   }
 

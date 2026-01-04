@@ -58,7 +58,7 @@ export function ProductActions({ product }: ProductActionsProps) {
           </div>
         </div>
         <h1 className="text-4xl font-bold tracking-tight">{product.name}</h1>
-        <p className="text-2xl font-semibold">${currentVariant?.price.toFixed(2) || product.base_price.toFixed(2)}</p>
+        <p className="text-2xl font-semibold">₹{currentVariant?.price.toFixed(2) || product.base_price.toFixed(2)}</p>
       </div>
 
       {/* Attributes */}
@@ -141,7 +141,7 @@ export function ProductActions({ product }: ProductActionsProps) {
                       </p>
                     </div>
                   </div>
-                  <p className="font-bold">${v.price.toFixed(2)}</p>
+                  <p className="font-bold">₹{v.price.toFixed(2)}</p>
                 </button>
               ))}
             </div>
@@ -178,7 +178,7 @@ export function ProductActions({ product }: ProductActionsProps) {
           <Truck className="h-5 w-5 text-muted-foreground" />
           <div className="space-y-0.5">
             <p className="text-[10px] font-bold uppercase tracking-widest">Free Shipping</p>
-            <p className="text-xs text-muted-foreground">On orders over $150</p>
+            <p className="text-xs text-muted-foreground">On orders over ₹150</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

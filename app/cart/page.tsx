@@ -115,7 +115,7 @@ export default function CartPage() {
                               Seller: {item.seller?.name || "Standard Seller"}
                             </p>
                           </div>
-                          <p className="text-lg font-bold">${(item.product?.base_price || 0).toFixed(2)}</p>
+                          <p className="text-lg font-bold">₹{(item.product?.base_price || 0).toFixed(2)}</p>
                         </div>
                         <div className="flex gap-4 text-xs font-bold uppercase tracking-widest">
                           {item.selected_attributes?.color && (
@@ -179,19 +179,19 @@ export default function CartPage() {
                   <div className="space-y-4">
                     <div className="flex justify-between text-sm font-medium">
                       <span className="text-muted-foreground">Subtotal</span>
-                      <span>${subtotal.toFixed(2)}</span>
+                      <span>₹{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm font-medium">
                       <span className="text-muted-foreground">Tax (8%)</span>
-                      <span>${tax.toFixed(2)}</span>
+                      <span>₹{tax.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm font-medium">
                       <span className="text-muted-foreground">Estimated Shipping</span>
-                      <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                      <span>{shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}</span>
                     </div>
                     <div className="flex justify-between text-xl font-bold pt-4 border-t">
                       <span>Total</span>
-                      <span>${total.toFixed(2)}</span>
+                      <span>₹{total.toFixed(2)}</span>
                     </div>
                   </div>
 

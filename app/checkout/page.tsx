@@ -153,7 +153,7 @@ export default async function CheckoutPage() {
                       <div className="flex flex-col justify-between py-1">
                         <p className="text-xs font-bold line-clamp-1">{item.product?.name}</p>
                         <p className="text-[10px] text-muted-foreground font-medium">Qty: {item.quantity}</p>
-                        <p className="text-xs font-bold">${(item.product?.base_price || 0).toFixed(2)}</p>
+                        <p className="text-xs font-bold">₹{(item.product?.base_price || 0).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -166,7 +166,7 @@ export default async function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-sm font-bold pt-4 border-t">
                     <span className="uppercase tracking-widest">Total to Pay</span>
-                    <span className="text-xl">${total.toFixed(2)}</span>
+                    <span className="text-xl">₹{total.toFixed(2)}</span>
                   </div>
                 </div>
 

@@ -28,7 +28,7 @@ export async function getReplenishmentSchedules(userId: string = DEMO_USER_ID) {
     .order("next_due_date", { ascending: true })
 
   if (error) {
-    console.error("[v0] Error fetching schedules:", error)
+    console.error("Error fetching schedules:", error)
     return []
   }
   return data as ReplenishmentSchedule[]

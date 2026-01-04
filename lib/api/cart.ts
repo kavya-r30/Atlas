@@ -18,7 +18,7 @@ export async function getCartItems(userId: string = DEMO_USER_ID) {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("[v0] Error fetching cart items:", error)
+    console.error("Error fetching cart items:", error)
     return []
   }
 
@@ -34,7 +34,7 @@ export async function addToCart(
 ) {
   const supabase = getSupabaseBrowserClient()
 
-  console.log("[v0] addToCart called with:", { userId, productId, quantity, sellerId, selectedAttributes })
+  console.log("addToCart called with:", { userId, productId, quantity, sellerId, selectedAttributes })
 
   // Check if item already exists
   const { data: existing } = await supabase
@@ -54,7 +54,7 @@ export async function addToCart(
       .single()
 
     if (error) {
-      console.error("[v0] Error updating cart item:", error)
+      console.error("Error updating cart item:", error)
       return null
     }
 
@@ -75,7 +75,7 @@ export async function addToCart(
     .single()
 
   if (error) {
-    console.error("[v0] Error adding to cart:", error)
+    console.error("Error adding to cart:", error)
     return null
   }
 
@@ -100,7 +100,7 @@ export async function updateCartItemQuantity(cartItemId: string, quantity: numbe
     .single()
 
   if (error) {
-    console.error("[v0] Error updating cart item quantity:", error)
+    console.error("Error updating cart item quantity:", error)
     return null
   }
 
@@ -113,7 +113,7 @@ export async function removeFromCart(cartItemId: string) {
   const { error } = await supabase.from("cart_items").delete().eq("id", cartItemId)
 
   if (error) {
-    console.error("[v0] Error removing from cart:", error)
+    console.error("Error removing from cart:", error)
     return false
   }
 
@@ -126,7 +126,7 @@ export async function clearCart(userId: string) {
   const { error } = await supabase.from("cart_items").delete().eq("user_id", userId)
 
   if (error) {
-    console.error("[v0] Error clearing cart:", error)
+    console.error("Error clearing cart:", error)
     return false
   }
 
@@ -142,7 +142,7 @@ export async function getCartCount(userId: string = DEMO_USER_ID) {
     .eq("user_id", userId)
 
   if (error) {
-    console.error("[v0] Error fetching cart count:", error)
+    console.error("Error fetching cart count:", error)
     return 0
   }
 

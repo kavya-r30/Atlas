@@ -85,7 +85,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
 
           <div className="flex items-center justify-between mt-4">
             <div className="flex items-center gap-4">
-              <p className="font-bold text-xl">${lowestPrice.toFixed(2)}</p>
+              <p className="font-bold text-xl">₹{lowestPrice.toFixed(2)}</p>
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-primary text-primary" />
                 <span className="text-sm font-medium">{product.avg_rating || 4.5}</span>
@@ -141,7 +141,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
             </Link>
             <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{product.category?.name || "Category"}</p>
           </div>
-          <p className="font-semibold text-sm">${lowestPrice.toFixed(2)}</p>
+          <p className="font-semibold text-sm">₹{lowestPrice.toFixed(2)}</p>
         </div>
 
         <div className="flex items-center justify-between pt-1">

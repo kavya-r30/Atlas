@@ -120,7 +120,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                               Qty: {item.quantity}
                             </p>
                           </div>
-                          <p className="font-bold">${item.price.toFixed(2)}</p>
+                          <p className="font-bold">₹{item.price.toFixed(2)}</p>
                         </div>
                         <Button
                           variant="outline"
@@ -173,19 +173,19 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 <div className="space-y-4 pt-8 border-t border-dashed">
                   <div className="flex justify-between text-xs font-medium">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span>${order.subtotal.toFixed(2)}</span>
+                    <span>₹{order.subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-xs font-medium">
                     <span className="text-muted-foreground">Tax</span>
-                    <span>${(order.tax || 0).toFixed(2)}</span>
+                    <span>₹{(order.tax || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-xs font-medium">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span>${(order.shipping_cost || 0).toFixed(2)}</span>
+                    <span>₹{(order.shipping_cost || 0).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold pt-4 border-t">
                     <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
+                    <span>₹{order.total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
