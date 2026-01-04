@@ -2,9 +2,11 @@ import { Navbar } from "@/components/navbar"
 import { getUserOrders } from "@/lib/api/orders"
 import { getUserAddresses } from "@/lib/api/addresses"
 import { DEMO_USER_ID } from "@/lib/constants"
-import { ShoppingBag, MapPin, User, Settings, Package, ChevronRight } from "lucide-react"
+import { ShoppingBag, MapPin, User, Settings, Package, ChevronRight, Plus, RefreshCw, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { AIReplenishmentCard } from "@/components/ai-replenishment-card"
+import { AIOutfitBuilder } from "@/components/ai-outfit-builder"
 
 export default async function ProfilePage() {
   const userId = DEMO_USER_ID
@@ -49,6 +51,8 @@ export default async function ProfilePage() {
                   { label: "Recent Orders", icon: Package, href: "#orders", active: true },
                   { label: "My Addresses", icon: MapPin, href: "#addresses" },
                   { label: "Account Settings", icon: User, href: "#settings" },
+                  { label: "Smart Replenishment", icon: RefreshCw, href: "#replenishment" },
+                  { label: "AI Outfit Builder", icon: Sparkles, href: "#outfit-builder" },
                 ].map((item) => (
                   <Link
                     key={item.label}
@@ -69,6 +73,46 @@ export default async function ProfilePage() {
 
             {/* Main Content */}
             <div className="lg:col-span-9 space-y-16">
+              {/* AI Predictive Replenishment Section */}
+              <section id="replenishment" className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold uppercase tracking-widest flex items-center gap-2">
+                    <RefreshCw className="h-5 w-5 text-sky-500" /> Smart Replenishment
+                  </h2>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                    Powered by AI
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <AIReplenishmentCard
+                    item={{
+                      id: "r1",
+                      product_name: "Daily Cleanser",
+                      image_url: "/placeholder.svg?height=200&width=200",
+                      next_replenishment_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+                      frequency_days: 45,
+                      last_ordered_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 38).toISOString(),
+                    }}
+                  />
+                  <AIReplenishmentCard
+                    item={{
+                      id: "r2",
+                      product_name: "Linen T-Shirt",
+                      image_url: "/placeholder.svg?height=200&width=200",
+                      next_replenishment_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12).toISOString(),
+                      frequency_days: 90,
+                      last_ordered_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 78).toISOString(),
+                    }}
+                  />
+                </div>
+              </section>
+
+              {/* AI Outfit Builder Section */}
+              <section id="outfit-builder">
+                <AIOutfitBuilder />
+              </section>
+
               {/* Recent Orders Section */}
               <section id="orders" className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -185,5 +229,3 @@ export default async function ProfilePage() {
     </div>
   )
 }
-
-import { Plus } from "lucide-react"

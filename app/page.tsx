@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navbar"
 import { ProductCard } from "@/components/product-card"
+import { AIReplenishmentWidget } from "@/components/ai-replenishment-widget"
 import { getFeaturedProducts, getTrendingProducts } from "@/lib/api/products"
 import { getCategories } from "@/lib/api/categories"
 import Link from "next/link"
@@ -15,34 +16,46 @@ export default async function HomePage() {
   ])
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col animate-fade-in">
       <Navbar />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative h-[80vh] w-full overflow-hidden bg-muted">
-          <Image src="/placeholder.svg?height=1080&width=1920" alt="Hero" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/40 to-transparent" />
+        <section className="relative h-[85vh] w-full overflow-hidden">
+          <Image
+            src="/luxury-lifestyle-minimalist.jpg"
+            alt="Hero"
+            fill
+            className="object-cover scale-105 animate-fade-in"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
           <div className="container relative h-full flex flex-col justify-center px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl space-y-6">
-              <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-balance leading-tight">
+            <div className="max-w-3xl space-y-8 stagger-children">
+              <span className="text-white text-[10px] font-bold uppercase tracking-[0.4em] bg-black/40 backdrop-blur-md px-3 py-1 w-fit">
+                New Collection 2026
+              </span>
+              <h1 className="text-6xl sm:text-8xl font-bold font-black tracking-tighter text-white leading-[0.9] text-balance">
                 Curated Style for the <span className="italic text-secondary">Modern Explorer</span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-lg text-pretty">
-                Discover a collection where quality meets design. Atlas brings you the finest selection from global
-                sellers.
+              <p className="text-lg sm:text-xl text-white/90 max-w-lg text-pretty font-medium leading-relaxed">
+                A definitive collection of timeless pieces, crafted for those who appreciate the intersection of form
+                and function.
               </p>
-              <div className="flex gap-4">
-                <Link href="/category/all">
-                  <Button size="lg" className="rounded-none px-8 h-12 uppercase tracking-widest font-bold">
-                    Shop Collection
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Link href="/shop">
+                  <Button
+                    size="lg"
+                    className="rounded-none px-10 h-14 uppercase tracking-widest font-black transition-all hover:bg-secondary hover:text-white"
+                  >
+                    Explore Shop
                   </Button>
                 </Link>
                 <Link href="/category/new-arrivals">
                   <Button
                     size="lg"
                     variant="outline"
-                    className="rounded-none px-8 h-12 uppercase tracking-widest font-bold bg-transparent"
+                    className="rounded-none px-10 h-14 uppercase tracking-widest font-black bg-white/10 text-white border-white/40 backdrop-blur-md hover:bg-white hover:text-black transition-all"
                   >
                     New Arrivals
                   </Button>
@@ -53,38 +66,41 @@ export default async function HomePage() {
         </section>
 
         {/* Featured Categories */}
-        <section className="py-24 container px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Featured Categories</h2>
-              <p className="text-muted-foreground mt-2">Explore our most popular departments</p>
+        <section className="py-32 container px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+            <div className="max-w-xl">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary mb-2 block">
+                Collections
+              </span>
+              <h2 className="text-4xl font-black tracking-tighter sm:text-5xl uppercase">Shop by category</h2>
             </div>
             <Link
               href="/categories"
-              className="hidden sm:flex items-center gap-2 text-sm font-bold uppercase tracking-widest hover:text-secondary transition-colors"
+              className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-secondary"
             >
-              View All <ArrowRight className="h-4 w-4" />
+              Discover all <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {categories.slice(0, 3).map((category, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {categories.slice(0, 3).map((category) => (
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className="group relative h-80 overflow-hidden bg-muted"
+                className="group relative aspect-[4/5] overflow-hidden bg-muted"
               >
                 <Image
-                  src={category.image_url || `/placeholder.svg?height=600&width=400&query=${category.name}`}
+                  src={category.image_url || `/placeholder.svg?height=800&width=600&query=${category.name}`}
                   alt={category.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black/20 transition-opacity group-hover:bg-black/40" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-white text-2xl font-bold tracking-widest uppercase text-center px-4">
+                <div className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/30" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                  <h3 className="text-white text-3xl font-black tracking-tighter uppercase mb-4 opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
                     {category.name}
                   </h3>
+                  <div className="w-12 h-[2px] bg-white scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
                 </div>
               </Link>
             ))}
@@ -92,22 +108,24 @@ export default async function HomePage() {
         </section>
 
         {/* Trending Products */}
-        <section className="py-24 bg-muted/30">
+        <section className="py-32 bg-muted/20 relative overflow-hidden">
           <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-end mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
               <div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Trending Now</h2>
-                <p className="text-muted-foreground mt-2">The pieces everyone is talking about</p>
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary mb-2 block">
+                  Curated Selection
+                </span>
+                <h2 className="text-4xl font-black tracking-tighter sm:text-5xl uppercase">The trending edit</h2>
               </div>
               <Link
                 href="/shop?sort=trending"
-                className="hidden sm:flex items-center gap-2 text-sm font-bold uppercase tracking-widest hover:text-secondary transition-colors"
+                className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-secondary"
               >
-                Shop All <ArrowRight className="h-4 w-4" />
+                View products <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-12 gap-x-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-16 gap-x-8 stagger-children">
               {trendingProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -115,30 +133,60 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Featured Selection */}
-        <section className="py-24 container px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-12 items-center mb-16">
-            <div className="w-full md:w-1/2 space-y-6">
-              <h2 className="text-4xl font-bold tracking-tight">The Atlas Curated Edit</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Hand-selected by our team of stylists, this season's collection focuses on versatility, sustainable
-                materials, and timeless silhouettes.
+        <AIReplenishmentWidget userId="user-123" />
+
+        {/* Journal Section */}
+        <section className="py-32 container px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <div className="space-y-8 stagger-children">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary block">
+                Atlas Journal
+              </span>
+              <h2 className="text-5xl sm:text-7xl font-black tracking-tighter leading-tight uppercase">
+                A story of <br /> craftsmanship
+              </h2>
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-md">
+                We believe in products that tell a story. Discover the artisans behind our newest sustainable collection
+                and the journey of every material we source.
               </p>
-              <Button variant="link" className="p-0 h-auto text-base font-bold uppercase tracking-widest group">
-                Read the journal <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <Button
+                variant="link"
+                className="p-0 h-auto text-xs font-black uppercase tracking-[0.3em] group hover:no-underline hover:text-secondary"
+              >
+                Read the journal <ArrowRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-2" />
               </Button>
             </div>
-            <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-              <div className="aspect-[3/4] relative overflow-hidden bg-muted">
-                <Image src="/placeholder.svg?height=600&width=450" alt="Edit 1" fill className="object-cover" />
+            <div className="grid grid-cols-2 gap-6">
+              <div className="aspect-[3/4] relative overflow-hidden bg-muted group">
+                <Image
+                  src="/craftsmanship.jpg"
+                  alt="Edit 1"
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
               </div>
-              <div className="aspect-[3/4] relative overflow-hidden bg-muted mt-8">
-                <Image src="/placeholder.svg?height=600&width=450" alt="Edit 2" fill className="object-cover" />
+              <div className="aspect-[3/4] relative overflow-hidden bg-muted mt-12 group">
+                <Image
+                  src="/design-details.jpg"
+                  alt="Edit 2"
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
               </div>
             </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-12 gap-x-6">
+        {/* Featured Selection */}
+        <section className="py-32 container px-4 sm:px-6 lg:px-8 border-t">
+          <div className="mb-16">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary mb-2 block">
+              Staff Picks
+            </span>
+            <h2 className="text-4xl font-black tracking-tighter sm:text-5xl uppercase">Featured selection</h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-16 gap-x-8 stagger-children">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -146,21 +194,21 @@ export default async function HomePage() {
         </section>
       </main>
 
-      <footer className="border-t py-12 bg-card">
+      <footer className="border-t py-20 bg-muted/10">
         <div className="container px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-            <div className="col-span-2 lg:col-span-2 space-y-6">
-              <Link href="/" className="text-2xl font-bold tracking-tighter">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
+            <div className="col-span-2 lg:col-span-2 space-y-8">
+              <Link href="/" className="text-3xl font-black tracking-tighter">
                 ATLAS
               </Link>
-              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
-                A modern e-commerce platform connecting discerning shoppers with exceptional products from global
-                artisans and brands.
+              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed font-medium">
+                Modern curation for the discerning explorer. We connect you with global brands that define the next
+                standard of quality and design.
               </p>
             </div>
-            <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-widest">Shop</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em]">Shop</h4>
+              <ul className="space-y-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/80">
                 <li>
                   <Link href="/shop" className="hover:text-primary transition-colors">
                     All Products
@@ -183,9 +231,9 @@ export default async function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-widest">Support</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em]">Support</h4>
+              <ul className="space-y-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/80">
                 <li>
                   <Link href="/contact" className="hover:text-primary transition-colors">
                     Contact Us
@@ -208,9 +256,9 @@ export default async function HomePage() {
                 </li>
               </ul>
             </div>
-            <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-widest">Atlas</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em]">Atlas</h4>
+              <ul className="space-y-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/80">
                 <li>
                   <Link href="/about" className="hover:text-primary transition-colors">
                     Our Story
