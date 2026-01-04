@@ -7,7 +7,6 @@ import { getOutfitBundles } from "@/lib/api/outfits"
 export default async function AIRecommendationsPage() {
   const [products, outfitBundles] = await Promise.all([getFeaturedProducts(8), getOutfitBundles(2)])
 
-  // Transform outfit bundles into the format AISmartBundles expects
   const bundles = outfitBundles.map((bundle) => ({
     id: bundle.id,
     name: bundle.name,

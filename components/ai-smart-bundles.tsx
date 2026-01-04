@@ -5,12 +5,24 @@ import { motion } from "framer-motion"
 import { ArrowRight, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
+interface Product {
+  id: string
+  name: string
+  slug: string
+  base_price: number
+  images: string[]
+  category?: {
+    id: string
+    name: string
+  }
+}
+
 interface Bundle {
   id: string
   name: string
   description: string
   discount_percentage: number
-  products: any[]
+  products: Product[]
 }
 
 export function AISmartBundles({ bundles }: { bundles: Bundle[] }) {
@@ -53,13 +65,18 @@ export function AISmartBundles({ bundles }: { bundles: Bundle[] }) {
               </div>
             </div>
             <div className="flex -space-x-8 md:-space-x-12 relative z-0">
-              {bundle.products?.slice(0, 3).map((p, i) => (
+              {bundle.products?.slice(0, 3).map((product, i) => (
                 <div
                   key={i}
                   className="w-32 h-40 relative bg-white shadow-xl overflow-hidden transition-transform duration-500 hover:-translate-y-4 hover:z-10"
                   style={{ zIndex: 3 - i }}
                 >
-                  <Image src={p.image_url || "/placeholder.svg"} alt={p.name} fill className="object-cover" />
+                  <Image
+                    src={product.images?.[0] || "/placeholder.svg"}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               ))}
             </div>
