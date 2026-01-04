@@ -5,7 +5,11 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 export default async function CategoriesPage() {
-  const categories = await getCategories()
+  const allCategories = await getCategories()
+
+  const categories = allCategories.filter(
+    (allCategories) => allCategories.product_count > 0
+  )
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

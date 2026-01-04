@@ -33,6 +33,7 @@ export interface Category {
   parent_id: string | null
   image_url: string | null
   created_at: string
+  product_count: number
 }
 
 export interface Product {
